@@ -6,19 +6,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.curiousca.jsonretro.model.PayLoad;
 
 import java.util.ArrayList;
 
 public class JsonAdapter extends RecyclerView.Adapter<JsonAdapter.JsonViewHolder> {
-
-    public static final String SHARED_PREFS = "sharedPrefs";
-    public static final String PREF_SWITCH = "prefSwitch";
-
 
     private Context mContext;
     private ArrayList<PayLoad> mPayload;
@@ -28,7 +26,8 @@ public class JsonAdapter extends RecyclerView.Adapter<JsonAdapter.JsonViewHolder
         this.mPayload = examplePayload;
     }
 
-    public class JsonViewHolder extends RecyclerView.ViewHolder{
+
+    public class JsonViewHolder extends RecyclerView.ViewHolder {
 
         public RelativeLayout mPushLayout;
         public RelativeLayout mEmailLayout;
@@ -59,11 +58,10 @@ public class JsonAdapter extends RecyclerView.Adapter<JsonAdapter.JsonViewHolder
             mSmsLayout = itemView.findViewById(R.id.rel_lay_text_message);
 
             selectViewsFromAPI();
-            //onSwitch();
 
         }
 
-        public void selectViewsFromAPI(){
+        public void selectViewsFromAPI() {
 
             mName.setVisibility(View.VISIBLE);
             mSubTitle.setVisibility(View.VISIBLE);
@@ -97,30 +95,61 @@ public class JsonAdapter extends RecyclerView.Adapter<JsonAdapter.JsonViewHolder
 
         holder.mName.setText(name);
         holder.mSubTitle.setText(subTitle);
-        if (pushAvailable){
+        if (pushAvailable) {
             holder.mPushLayout.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             holder.mPushLayout.setVisibility(View.GONE);
         }
-        if (emailAvailable){
+        if (emailAvailable) {
             holder.mEmailLayout.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             holder.mEmailLayout.setVisibility(View.GONE);
         }
-        if (smsAvailable){
+        if (smsAvailable) {
             holder.mSmsLayout.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             holder.mSmsLayout.setVisibility(View.GONE);
         }
         holder.mEmailSwitch.setChecked(emailEnabled);
         holder.mSmsSwitch.setChecked(smsEnabled);
         holder.mPushSwitch.setChecked(pushEnabled);
 
-        if (!pushAvailable && !emailAvailable && ! smsAvailable){
+        if (!pushAvailable && !emailAvailable && !smsAvailable) {
             holder.mName.setVisibility(View.GONE);
             holder.mSubTitle.setVisibility(View.GONE);
         }
 
+        holder.mPushSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+                    Toast.makeText(mContext, "Push is ON", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(mContext, "Push is OFF", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+        holder.mEmailSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+                    Toast.makeText(mContext, "Email is ON", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(mContext, "Email is OFF", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        holder.mSmsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+                    Toast.makeText(mContext, "Text is ON", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(mContext, "Text is OFF", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override

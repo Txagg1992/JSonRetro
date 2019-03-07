@@ -32,6 +32,46 @@ public class PayLoad {
     @SerializedName("emailEnabled")
     private Boolean emailEnabled;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
+    }
+
+    public Boolean getPushAvailable() {
+        return pushAvailable;
+    }
+
+    public void setPushAvailable(Boolean pushAvailable) {
+        this.pushAvailable = pushAvailable;
+    }
+
+    public Boolean getSmsAvailable() {
+        return smsAvailable;
+    }
+
+    public void setSmsAvailable(Boolean smsAvailable) {
+        this.smsAvailable = smsAvailable;
+    }
+
+    public Boolean getEmailAvailable() {
+        return emailAvailable;
+    }
+
+    public void setEmailAvailable(Boolean emailAvailable) {
+        this.emailAvailable = emailAvailable;
+    }
+
     public Boolean getPushEnabled() {
         return pushEnabled;
     }
@@ -54,46 +94,6 @@ public class PayLoad {
 
     public void setEmailEnabled(Boolean emailEnabled) {
         this.emailEnabled = emailEnabled;
-    }
-
-    public Boolean getSmsAvailable() {
-        return smsAvailable;
-    }
-
-    public void setSmsAvailable(Boolean smsAvailable) {
-        this.smsAvailable = smsAvailable;
-    }
-
-    public Boolean getEmailAvailable() {
-        return emailAvailable;
-    }
-
-    public void setEmailAvailable(Boolean emailAvailable) {
-        this.emailAvailable = emailAvailable;
-    }
-
-    public Boolean getPushAvailable() {
-        return pushAvailable;
-    }
-
-    public void setPushAvailable(Boolean pushAvailable) {
-        this.pushAvailable = pushAvailable;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSubtitle() {
-        return subtitle;
-    }
-
-    public void setSubtitle(String subtitle) {
-        this.subtitle = subtitle;
     }
 
     @Override

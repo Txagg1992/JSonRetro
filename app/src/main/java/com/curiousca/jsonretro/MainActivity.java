@@ -20,12 +20,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String EXTRA_NAME = "payloadName";
-
     public static final String TAG = "MainActivity";
     private RecyclerView mRecyclerView;
     private JsonAdapter mJsonAdapter;
-    //private ArrayList<ExampleItemPost> mExampleItemPost;
     private ArrayList<PayLoad> mPayload;
     private static final String BASE_URL = "https://one-np.stg.telematicsct.com/";
 
@@ -42,60 +39,74 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void parseJson() {
+        try {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+            JsonPlaceHolder jsonPlaceHolder = retrofit.create(JsonPlaceHolder.class);
 
-        JsonPlaceHolder jsonPlaceHolder = retrofit.create(JsonPlaceHolder.class);
+            Call<Data> call = jsonPlaceHolder.getPayload();
 
-        Call<Data> call = jsonPlaceHolder.getPayload();
+            try {
+                call.enqueue(new Callback<Data>() {
+                    @Override
+                    public void onResponse(Call<Data> call, Response<Data> response) {
+                        if (!response.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(), "Code: " + response.code(),
+                                    Toast.LENGTH_LONG).show();
+                            Log.d("NotResponseSuccessful", "Code: " + response.code());
+                            return;
+                        }else {
+                            Toast.makeText(getApplicationContext(), "Code: " + response.code(),
+                                    Toast.LENGTH_LONG).show();
+                            Log.d("Success!", "Response Code is " + response.code());
+                        }
 
-        call.enqueue(new Callback<Data>() {
-            @Override
-            public void onResponse(Call<Data> call, Response<Data> response) {
-                if (!response.isSuccessful()) {
-                    Toast.makeText(getApplicationContext(), "Code: " + response.code(),
-                            Toast.LENGTH_LONG).show();
-                    Log.d("NotResponseSuccessful", "Code: " + response.code());
-                    return;
-                }else {
-                    Toast.makeText(getApplicationContext(), "Code: " + response.code(),
-                            Toast.LENGTH_LONG).show();
-                    Log.d("Success!", "Response Code is " + response.code());
-                }
+                        ArrayList<PayLoad> payload = response.body().getPayload();
+                        for (int i = 0; i < payload.size(); i++){
 
-                ArrayList<PayLoad> payload = response.body().getPayload();
-                for (int i = 0; i < payload.size(); i++){
+                            payload.get(i).getName();
+                            payload.get(i).getSubtitle();
 
-                    payload.get(i).getName();
-                    payload.get(i).getSubtitle();
-                    payload.get(i).getPushAvailable();
-                    payload.get(i).getSmsAvailable();
-                    payload.get(i).getEmailAvailable();
-                    payload.get(i).getPushEnabled();
-                    payload.get(i).getSmsEnabled();
-                    payload.get(i).getEmailEnabled();
+                            payload.get(i).getPushAvailable();
+                            payload.get(i).getSmsAvailable();
+                            payload.get(i).getEmailAvailable();
 
-                    Log.d(TAG, "onResponse: \n" +
-                            "Name: " + payload.get(i).getName() + "\n" +
-                            "Subtitle: " + payload.get(i).getSubtitle()+ "\n" +
-                            "Push Available: " + payload.get(i).getPushAvailable() + "\n" +
-                            "Email Available: " + payload.get(i).getEmailAvailable() + "\n" +
-                            "Sms Available: " + payload.get(i).getSmsAvailable());
-                }
-                mJsonAdapter = new JsonAdapter(getApplicationContext(), payload);
-                mRecyclerView.setAdapter(mJsonAdapter);
+                            payload.get(i).getPushEnabled();
+                            payload.get(i).getSmsEnabled();
+                            payload.get(i).getEmailEnabled();
 
+                            Log.d(TAG, "onResponse: \n" +
+                                    "Name: " + payload.get(i).getName() + "\n" +
+                                    "Subtitle: " + payload.get(i).getSubtitle()+ "\n" +
+                                    "Push Available: " + payload.get(i).getPushAvailable() + "\n" +
+                                    "Email Available: " + payload.get(i).getEmailAvailable() + "\n" +
+                                    "Sms Available: " + payload.get(i).getSmsAvailable() + "\n" +
+                                    "Push Enabled: " + payload.get(i).getPushEnabled() + "\n" +
+                                    "Email Enabled: " + payload.get(i).getEmailEnabled() + "\n" +
+                                    "Sms Enabled: " + payload.get(i).getSmsEnabled());
+                        }
+                        mJsonAdapter = new JsonAdapter(getApplicationContext(), payload);
+                        mRecyclerView.setAdapter(mJsonAdapter);
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<Data> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                        Log.d("onFailure", t.getMessage());
+                    }
+                });
+            }catch (Exception e){
+                e.printStackTrace();
             }
 
-            @Override
-            public void onFailure(Call<Data> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-                Log.d("onFailure", t.getMessage());
-            }
-        });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
 
     }
 
